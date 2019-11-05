@@ -1,0 +1,181 @@
+<!doctype html>
+<html class="js">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <title>Crash Finder</title>
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <!-- Loading Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Loading DC.js CSS -->
+    <link rel="stylesheet" href="css/dc.css">
+    <!-- Loading Dynatable CSS -->
+    <link rel="stylesheet" href="css/jquery.dynatable.css">
+    <!-- Loading Customized CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Info Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">About this visualization</h4>
+                </div>
+                <div class="modal-body">
+                    <img src="images/info.png" alt="info-image" style="width:100%;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- / Info Modal -->
+
+    <!-- navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" id="navbar" role="navigation">
+        <!-- navbar-container -->
+        <div class="container-fluid">
+            <!-- navbar-header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="images/logo.png" alt="logo" style="position:absolute; top:0; width:72px; height:72px;">
+                    <p style="margin:0 0 0 80px;">Crash Finder</p>
+                </a>
+            </div><!-- / navbar-header -->
+            <!-- navbar-collapse -->
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a data-toggle="modal" data-target="#infoModal" style="cursor:pointer;">
+                            <span class="glyphicon glyphicon-info-sign"></span>&nbsp;ABOUT
+                        </a>
+                    </li>
+                </ul>
+            </div><!-- / navabr-collapse -->
+        </div><!-- / navbar-container -->
+    </div><!-- / navabr -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- sidebar -->
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active" id="mapNav"><a href="#mapContainer">Location</a>
+                    </li>
+                    <li id="injuryNav"><a href="#typeTimeContainer">Type & Time</a>
+                    </li>
+                    <li id="injuryNav"><a href="#injuryContainer">Stack & Bar</a>
+                    </li>
+                    <li id="dataTableNav"><a href="#dataTableContainer">Data Table</a>
+                    </li>
+                </ul>
+            </div><!-- / sidebar -->
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="row chartContainer align-center" id="mapContainer">
+                    <div id="mapChart">
+                        <h3>Total casualties in different States</h3>
+                        <a class="reset" href="javascript:mapChart.filterAll();dc.redrawAll();" style="display: none;">RESET</a>
+                        <span class="reset" style="display: none;">| Current Filter:
+                            <span class="filter"></span>
+                        </span>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="row chartContainer align-center" id="typeTimeContainer">
+                    <h3>Types & Times</h3>
+
+                    <div id="fatal-type-chart" class="col-sm-4 col-md-4 align-center">
+                        <strong>Days by Injury Types</strong>
+                        <a class="reset" href="javascript:fatalTypeChart.filterAll();dc.redrawAll();" style="display: none;">| RESET</a>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div id="quarter-chart" class="col-sm-4 col-md-4 align-center">
+                        <strong>Quarters</strong>
+                        <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">| RESET</a>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div id="week-chart" class="col-sm-4 col-md-4 align-center">
+                        <strong>Day of Week</strong>
+                        <a class="reset" href="javascript:weekChart.filterAll();dc.redrawAll();" style="display: none;">| RESET</a>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="row chartContainer" id="injuryContainer">
+                    <div id="stack-chart" class="align-center">
+                        <h3>Monthly Casualties</h3>
+                        <span class="reset" style="display: none;">Range:
+                            <span class="filter"></span>
+                        </span>
+                        <a class="reset" href="javascript:stackChart.filterAll();volumeChart.filterAll();dc.redrawAll();" style="display: none;">| RESET</a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="row chartContainer">
+                    <div id="bar-chart" class="align-center">
+                        <p>select a time range to zoom in</p>
+                    </div>
+                </div>
+                <div class="row chartContainer" id="dataTableContainer">
+                    <h3 class="align-center">Aviation accidents</h3>
+                    <div class="dc-data-count chart">
+                        <span class="filter-count"></span>selected out of
+                        <span class="total-count"></span>records | <a href="javascript:dc.filterAll(); dc.renderAll();">RESET ALL</a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <table class="table table-hover dc-data-table">
+                        <thead>
+                            <tr class="header">
+                                <th>accidentNumber</th>
+                                <th>eventDate</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>injuryServerity</th>
+                                <th>model</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div><!-- / content-container -->
+
+    <!-- Loading Library Scripts -->
+    <script src="lib/jquery-1.11.0.min.js"></script>
+    <script src="lib/jquery.dynatable.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+    <script src="lib/d3.min.js"></script>
+    <script src="lib/crossfilter.min.js"></script>
+    <script src="lib/dc.min.js"></script>
+
+    <!-- Loading Customized Script -->
+    <script src="js/script.js"></script>
+    <script src="js/chart.js"></script>
+
+</body>
+
+</html>
